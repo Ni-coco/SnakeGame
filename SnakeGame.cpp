@@ -23,9 +23,8 @@ int main() {
     initgraph(&gd,&gm,(char*)"");
     setfillstyle(1,1); //(style,color)
     x[0] = 200, y[0] = 200;
-    d=1;
+    d = 1;
     int length = 1;
-
     for(;;) {
         setfillstyle(1,0);
         bar(0,0,640,480);
@@ -97,6 +96,7 @@ int main() {
                 y[0]= y[0]+10;
                 break;
         }
+
         for(int i = 0; i < length;i++)
             bar(x[i],y[i],x[i]+10,y[i]+10);
 
@@ -104,7 +104,7 @@ int main() {
             x[i] = x[i-1];
             y[i] = y[i -1];
         }
-
+        
         delay(100); //speed of snake
 
         /* dies into wall*/
