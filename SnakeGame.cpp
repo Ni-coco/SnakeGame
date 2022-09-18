@@ -1,12 +1,12 @@
-#include<graphics.h>
-#include<time.h>
-#include<stdio.h>
-#include<stdlib.h>
+#include <graphics.h>
+#include <time.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 int scoring(int e, int a);
 
 int main() {
-    
+
     //direction
     int gd = DETECT,gm,rx=200,ry=200,x[200],y[200],d, pass = 1;
        for(int i = 0; i < 200 ; i++) {
@@ -20,41 +20,44 @@ int main() {
 
     //directions
     int dir = 1;
-    initgraph(&gd,&gm,(char*)"");
+    initwindow(640, 480, (char*)"Snake Game");
     setfillstyle(1,1); //(style,color)
     x[0] = 200, y[0] = 200;
     d = 1;
     int length = 1;
     for(;;) {
         setfillstyle(1,0);
-        bar(0,0,640,480);
+        bar(0,0,640,480); //remplir l'écran en noir.
         setfillstyle(1,2);
-        bar(0,0,640,10);
-        bar(0,0,10,480);
-        bar(0,480,640,470);
-        bar(630,10,640,480);
+        bar(0,0,640,10); // ligne du haut
+        bar(0,0,10,480); // ligne gauche
+        bar(0,480,640,470); // ligne du bas
+        bar(630,10,640,480); // ligne droite 
 
        // food taken?
        if(x[0] == rx && y[0] == ry) {
-        length++; // length of snake
-        f++; // score
-        setfillstyle(1, 0);
-        bar(rx, ry, rx + 10, ry + 10);
+            length++; // length of snake
+            f++; // score
 
-        //make food
-            do{
+            //make food
+            do {
 	            rx = (1+rand()%630);
 	            ry = (1+rand()%470);
             }
             while(getpixel(rx,ry)!=0 && rx > 10 && ry > 10);
 
-        rx=rx/10;
-        rx=rx*10;
-        ry=ry/10;
-        ry=ry*10;
+            //del 10 + 1 to 9
+            rx=rx/10;
+            rx=rx*10;
+            ry=ry/10;
+            ry=ry*10;
+            }
+
+        //display food
         setfillstyle(1,2);
-        }
         bar(rx,ry,rx+10,ry+10);
+
+        // get direction
         if(GetAsyncKeyState(VK_RIGHT))
             d=1;
         else if(GetAsyncKeyState(VK_LEFT))
@@ -66,6 +69,7 @@ int main() {
         else
             d=0;
 
+        // update direction
         switch(d){
             case 0:
             if(dir==1)
@@ -97,8 +101,9 @@ int main() {
                 break;
         }
 
+        // add length
         for(int i = 0; i < length;i++)
-            bar(x[i],y[i],x[i]+10,y[i]+10);
+            bar(x[i],y[i],x[i] + 10,y[i] + 10);
 
         for(int i= 199; i >0;i--) {
             x[i] = x[i-1];
@@ -107,23 +112,25 @@ int main() {
         
         delay(100); //speed of snake
 
-        /* dies into wall*/
+        /* dies into wall */
         if(x[0] >= 640 || x[0] <= 0|| y[0] <= 0 || y[0] >= 480) {
             closegraph();
             initgraph(&gd,&gm,(char*)"");
-            outtext((char *)"You died outside the boundary! Press any key to exit");
+            settextjustify(CENTER_TEXT, CENTER_TEXT);
+            outtextxy(getmaxx()/2, getmaxy()/2, (char *)"You died outside the boundary! Press any key to exit");
             getch();
             scoring(f,0);
             closegraph();
             break;
         }
 
-        /*dies into yourself*/
+        /* dies into yourself */
         for(int i = 2; i < length;i++) {
             if(x[0] == x[i] && y[0] == y[i]) {
                 closegraph();
                 initgraph(&gd,&gm,(char*)"");
-                outtext((char *)"You died into yourself! Press any key to exit");
+                settextjustify(CENTER_TEXT, CENTER_TEXT);
+                outtextxy(getmaxx()/2, getmaxy()/2, (char *)"You died into yourself! Press any key to exit");
                 getch();
                 pass = scoring(f,1);
                 closegraph();
